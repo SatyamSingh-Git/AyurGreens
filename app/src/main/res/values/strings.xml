@@ -1,3 +1,8 @@
 <resources>
     <string name="app_name">AyurGreens</string>
+    <string name="Ayurgreens">AyurGreens</string>
+    <string name="appSecondarySuheading">A Medicinal Virtual-Garden </string>
+    <string name="appTertiarySubheading">Learn, Grow and Explore the Nature\'s Healing Power</string>
+    <string name="NoOfBookmarks">7 Bookmarks</string>
+    <string name="MainscreenText">Healing Power of Nature</string>
 </resources>
