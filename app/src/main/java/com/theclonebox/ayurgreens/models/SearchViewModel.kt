@@ -15,7 +15,6 @@ class SearchViewModel : ViewModel(){
         val searchText = _searchText.asStateFlow()
 
         private val _isSearching = MutableStateFlow(false)
-        val isSearching = _isSearching.asStateFlow()
 
         private val _plants = MutableStateFlow(SearchBarDataList)
         val plants = searchText.combine(_plants){
