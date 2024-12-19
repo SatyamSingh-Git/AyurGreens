@@ -3,6 +3,7 @@
 plugins {
     alias(libs.plugins.android.application)
     alias(libs.plugins.jetbrains.kotlin.android)
+    alias(libs.plugins.google.gms.google.services)
 }
 
 android {
@@ -64,6 +65,7 @@ android {
         implementation(libs.androidx.material3)
         implementation(libs.ui.text.google.fonts)
         implementation(libs.androidx.core.splashscreen)
+        implementation(libs.firebase.auth)
         testImplementation(libs.junit)
         androidTestImplementation(libs.androidx.junit)
         androidTestImplementation(libs.androidx.espresso.core)
@@ -72,6 +74,14 @@ android {
         debugImplementation(libs.androidx.ui.tooling)
         implementation(libs.ui.text.google.fonts)
         debugImplementation(libs.androidx.ui.test.manifest)
+        implementation(libs.androidx.navigation.compose)
+        implementation(libs.ui.text.google.fonts)
+        implementation(libs.generativeai)
+
+        implementation(libs.play.services.auth)
+        implementation(libs.coil.compose)
+        implementation (libs.accompanist.navigation.animation)
+
     }
 
 

@@ -1,8 +1,11 @@
 [versions]
+accompanistNavigationAnimation = "0.20.0"
 agp = "8.5.0"
 androidxUiToolingPreview = "0.1.0-dev07"
+coilCompose = "2.6.0"
 core = "1.45.0"
 coreSplashscreen = "1.0.1"
+generativeai = "0.9.0"
 kotlin = "1.9.0"
 coreKtx = "1.13.1"
 junit = "4.13.2"
@@ -12,6 +15,8 @@ lifecycleRuntimeKtx = "2.8.4"
 activityCompose = "1.9.1"
 composeBom = "2024.04.01"
 material3 = "1.2.1"
+navigationCompose = "2.8.0"
+playServicesAuth = "21.2.0"
 sceneform = "1.19.3"
 sceneformFilament = "1.19.3"
 sceneformFilamentVersion = "1.19.3"
@@ -24,12 +29,18 @@ sceneformUx = "1.17.1"
 appcompat = "1.7.0"
 uiToolingPreview = "1.6.8"
 uiTextGoogleFontsVersion = "1.7.0"
+googleGmsGoogleServices = "4.4.2"
+firebaseAuth = "23.1.0"
 
 [libraries]
+accompanist-navigation-animation = { module = "com.google.accompanist:accompanist-navigation-animation", version.ref = "accompanistNavigationAnimation" }
 androidx-core-ktx = { group = "androidx.core", name = "core-ktx", version.ref = "coreKtx" }
 androidx-core-splashscreen = { module = "androidx.core:core-splashscreen", version.ref = "coreSplashscreen" }
+androidx-navigation-compose = { module = "androidx.navigation:navigation-compose", version.ref = "navigationCompose" }
 androidx-ui-ui-tooling-preview = { module = "androidx.ui:ui-tooling-preview", version.ref = "androidxUiToolingPreview" }
+coil-compose = { module = "io.coil-kt:coil-compose", version.ref = "coilCompose" }
 core = { module = "com.google.ar:core", version.ref = "core" }
+generativeai = { module = "com.google.ai.client.generativeai:generativeai", version.ref = "generativeai" }
 gorisse-sceneform = { module = "com.gorisse.thomas.sceneform:sceneform", version.ref = "sceneformVersion" }
 gorisse-sceneform-filament = { module = "com.gorisse.thomas.sceneform:sceneform-filament", version.ref = "sceneformFilamentVersion" }
 junit = { group = "junit", name = "junit", version.ref = "junit" }
@@ -48,6 +59,7 @@ androidx-material3 = { group = "androidx.compose.material3", name = "material3" 
 androidx-ui-text-google-fonts = { group = "androidx.compose.ui", name = "ui-text-google-fonts", version.ref = "uiTextGoogleFonts" }
 androidx-benchmark-macro = { group = "androidx.benchmark", name = "benchmark-macro", version.ref = "benchmarkMacro" }
 material3 = { module = "androidx.compose.material3:material3", version.ref = "material3" }
+play-services-auth = { module = "com.google.android.gms:play-services-auth", version.ref = "playServicesAuth" }
 sceneform = { module = "com.google.ar.sceneform:sceneform", version.ref = "sceneform" }
 sceneform-filament = { module = "com.google.ar.sceneform:sceneform-filament", version.ref = "sceneformFilament" }
 sceneform-ux = { group = "com.google.ar.sceneform.ux", name = "sceneform-ux", version.ref = "sceneformUx" }
@@ -56,8 +68,10 @@ sceneform-ux-v1160 = { module = "com.google.ar.sceneform.ux:sceneform-ux", versi
 ui = { module = "androidx.compose.ui:ui", version.ref = "ui" }
 ui-tooling-preview = { module = "androidx.compose.ui:ui-tooling-preview", version.ref = "uiToolingPreview" }
 ui-text-google-fonts = { group = "androidx.compose.ui", name = "ui-text-google-fonts", version.ref = "uiTextGoogleFontsVersion" }
+firebase-auth = { group = "com.google.firebase", name = "firebase-auth", version.ref = "firebaseAuth" }
 
 [plugins]
 android-application = { id = "com.android.application", version.ref = "agp" }
 jetbrains-kotlin-android = { id = "org.jetbrains.kotlin.android", version.ref = "kotlin" }
+google-gms-google-services = { id = "com.google.gms.google-services", version.ref = "googleGmsGoogleServices" }
 

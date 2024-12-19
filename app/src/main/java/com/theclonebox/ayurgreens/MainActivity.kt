@@ -1,6 +1,6 @@
 package com.theclonebox.ayurgreens
 
-import android.app.Activity
+import SearchAndNavigationScreen
 import android.os.Bundle
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
@@ -14,9 +14,8 @@ import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material3.Scaffold
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.LaunchedEffect
-import androidx.compose.runtime.mutableStateOf
-import androidx.compose.runtime.remember
+import androidx.compose.runtime.MutableState
+import androidx.compose.runtime.mutableIntStateOf
 import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
@@ -25,8 +24,15 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.core.content.ContextCompat
 import androidx.core.splashscreen.SplashScreen.Companion.installSplashScreen
-import androidx.core.view.WindowCompat
+import androidx.lifecycle.ViewModelProvider
+import androidx.navigation.NavHostController
+import androidx.navigation.compose.NavHost
+import androidx.navigation.compose.composable
+import androidx.navigation.compose.rememberNavController
 import com.theclonebox.ayurgreens.ScreenElements.BottomNavigationBar
+import com.theclonebox.ayurgreens.models.ChatViewModel
+import com.theclonebox.ayurgreens.screens.BookmarkScreen
+import com.theclonebox.ayurgreens.screens.ChatBot
 import com.theclonebox.ayurgreens.screens.MainScreen
 import com.theclonebox.ayurgreens.ui.theme.AyurGreensTheme
 
@@ -35,40 +41,77 @@ class MainActivity : ComponentActivity() {
         super.onCreate(savedInstanceState)
         installSplashScreen()
         enableEdgeToEdge()
+
+        val chatViewModel = ViewModelProvider(this)[ChatViewModel::class.java]
         setContent {
             AyurGreensTheme {
-                MainScreenWithStatusBar()
+                val navController = rememberNavController()  //***
+                NavHost(navController = navController, startDestination = "authScreen") {  //***
+                    composable("authScreen") { AuthScreen(navController = navController) }   //***
+                    composable("mainScreen") { MainScreenWithStatusBar(navController = navController) }  //***
+                }
             }
         }
     }
 }
 
 @Composable
-fun MainScreenWithStatusBar() {
+fun MainScreenWithStatusBar(navController: NavHostController) {  //***
     val context = LocalContext.current
     val greenColor = ContextCompat.getColor(context, android.R.color.holo_green_dark)
+    val selectedItem = rememberSaveable { mutableIntStateOf(0) } // Move state here
+    val navController = rememberNavController() // Create NavHostController
 
     Scaffold(
-        modifier = Modifier.fillMaxSize(), bottomBar = {BottomNavigationBar(rememberSaveable { mutableStateOf(0) })}
+        modifier = Modifier.fillMaxSize(),
+        bottomBar = { BottomNavigationBar(selectedItem = selectedItem) } // Pass state to BottomNavigationBar
     ) { paddingValues ->
-        Column {
-            // Custom Status Bar
-            Box(
-                modifier = Modifier
-                    .fillMaxWidth()
-                    .height(40.dp) // Set your desired height here
-                    .background(Color(greenColor))
-            )
-            // Main Content
-            MainScreen(modifier = Modifier.padding(paddingValues))
+        // Custom Status Bar
+        Box(
+            modifier = Modifier
+                .fillMaxWidth()
+                .height(40.dp) // Set your desired height here
+                .background(Color(greenColor))
+        )
+        // Main Content
+
+        MainSelectedScreen(
+            modifier = Modifier.padding(paddingValues),
+            selectedItem = selectedItem,
+            navController = navController // Pass navController
+        )
+    }
+}
+
+@Composable
+fun MainSelectedScreen(
+    modifier: Modifier,
+    selectedItem: MutableState<Int>,
+    navController: NavHostController
+) {
+    Column(modifier = modifier.fillMaxSize()) {
+        // Display the selected screen
+        when (selectedItem.value) {
+            0 -> MainScreen(modifier = Modifier)
+            1 -> ExploreScreen(modifier = Modifier)
+            2 -> SearchAndNavigationScreen(navController = navController) // Pass navController
+            3 -> BookmarkScreen(modifier = Modifier)
+            4 -> ChatBot(modifier = Modifier.padding(), viewModel = ChatViewModel())
         }
     }
 }
+
+
+@Composable
+fun ExploreScreen(modifier: Modifier.Companion) {
+
+}
+
 
 @Preview(showBackground = true, showSystemUi = true)
 @Composable
 fun GreetingPreview() {
     AyurGreensTheme {
-        MainScreenWithStatusBar()
+        MainScreenWithStatusBar(navController = rememberNavController())
     }
 }

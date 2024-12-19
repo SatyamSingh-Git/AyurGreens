@@ -4,6 +4,7 @@ import androidx.compose.animation.core.animateDpAsState
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.border
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
@@ -21,7 +22,10 @@ import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.LazyRow
 import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.material3.DropdownMenu
+import androidx.compose.material3.DropdownMenuItem
 import androidx.compose.material3.Icon
+import androidx.compose.material3.IconButton
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
@@ -55,31 +59,62 @@ import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import androidx.navigation.NavHostController
+import androidx.navigation.compose.NavHost
+import androidx.navigation.compose.composable
+import androidx.navigation.compose.rememberNavController
+import com.google.firebase.auth.ktx.auth
+import com.google.firebase.ktx.Firebase
+import com.theclonebox.ayurgreens.AuthScreen
 import com.theclonebox.ayurgreens.R
-import com.theclonebox.ayurgreens.ScreenElements.BottomNavigationBar
 import com.theclonebox.ayurgreens.data.Plant
 import com.theclonebox.ayurgreens.data.plantCategoryList
-import com.theclonebox.ayurgreens.data.plants
-
+import com.theclonebox.ayurgreens.data.plantsMainScreenList
 @Composable
 fun MainScreen(modifier: Modifier = Modifier) {
+    val navController = rememberNavController()
+    val user = Firebase.auth.currentUser
+
+
+    NavHost(
+        navController = navController,
+        startDestination = if (user != null) "main" else "authScreen"
+    ) {
+        composable("main") { MainContent(navController) }
+        composable("authScreen") { AuthScreen(navController) }
+        composable("eachPlantDescription/{plantId}") { backStackEntry ->
+            EachPlantDescriptionScreen(
+                plantId = backStackEntry.arguments?.getString("plantId") ?: "",
+                navController = navController
+            )
+        }
+    }
+}
+
+@Composable
+fun MainContent(navController: NavHostController) {
     var recentSearchesHeight by remember { mutableStateOf(200.dp) }
-    val animatedRecentSearchesHeight by animateDpAsState(targetValue = recentSearchesHeight, label = "RecentSearchesHeight")
+    val animatedRecentSearchesHeight by animateDpAsState(
+        targetValue = recentSearchesHeight,
+        label = "RecentSearchesHeight"
+    )
 
     val nestedScrollConnection = remember {
         object : NestedScrollConnection {
             override fun onPreScroll(available: Offset, source: NestedScrollSource): Offset {
                 val delta = available.y
                 if (delta < 0) {
-                    // Scrolling up, hide the "Recent Searches" section
                     recentSearchesHeight = (recentSearchesHeight + delta.dp).coerceAtLeast(0.dp)
                 } else if (delta > 0) {
-                    // Scrolling down, show the "Recent Searches" section
                     recentSearchesHeight = (recentSearchesHeight + delta.dp).coerceAtMost(200.dp)
                 }
                 return Offset.Zero
             }
         }
+    }
+
+    var expanded by remember {
+        mutableStateOf(false)
     }
 
     Surface(
@@ -89,7 +124,7 @@ fun MainScreen(modifier: Modifier = Modifier) {
         Column(
             modifier = Modifier
                 .fillMaxSize()
-                .padding(top = 0.dp, start = 8.dp, end = 8.dp)
+                .padding(top = 0.dp, start = 8.dp, end = 8.dp, bottom = 0.dp)
         ) {
             // Header
             Row(
@@ -107,11 +142,44 @@ fun MainScreen(modifier: Modifier = Modifier) {
                 Row(
                     verticalAlignment = Alignment.CenterVertically
                 ) {
-                    Icon(painter = painterResource(id = R.drawable.menu_svgrepo_com__1_),
-                        contentDescription = null,
-                        modifier = Modifier.size(24.dp))
+                    IconButton(onClick = { expanded = true }) {
+                        Icon(
+                            painter = painterResource(id = R.drawable.person_front_view_svgrepo_com),
+                            contentDescription = null,
+                            modifier = Modifier.size(34.dp)
+                        )
+
+                    }
+                    DropdownMenu(
+                        expanded = expanded,
+                        onDismissRequest = { expanded = false }
+                    ) {
+                        DropdownMenuItem(
+                            text = {
+                                Text(
+                                    text = "Sign Out",
+                                    fontSize = 16.sp,
+                                    fontWeight = FontWeight.Bold,
+                                    color = Color(0xFF49792B),
+                                    modifier = Modifier
+                                        .padding(12.dp)
+                                )
+                            },
+                            onClick = {
+                                Firebase.auth.signOut()
+                                navController.navigate("authScreen") {
+                                    popUpTo("mainScreen") { inclusive = true }
+                                }
+                                expanded = false
+                            },
+                            modifier = Modifier
+                                .background(Color(0xFFD1E0C6))
+                                .clip(RoundedCornerShape(50.dp))
+                        )
+                    }
                 }
             }
+
 
             // Title
             Text(
@@ -138,11 +206,13 @@ fun MainScreen(modifier: Modifier = Modifier) {
                     Text(
                         text = "Recent Searches",
                         color = Color(0xff394929),
-                        style = TextStyle(fontSize = 20.sp,
-                            fontWeight = FontWeight.Bold),
+                        style = TextStyle(
+                            fontSize = 20.sp,
+                            fontWeight = FontWeight.Bold
+                        ),
                     )
                     Spacer(modifier = Modifier.height(8.dp))
-                    RecentPlantsLazyRow(plants)
+                    RecentPlantsLazyRow(plantsMainScreenList, navController) // Pass navController here
                 }
             }
 
@@ -161,11 +231,12 @@ fun MainScreen(modifier: Modifier = Modifier) {
                     .weight(1f)
                     .nestedScroll(nestedScrollConnection) // Attach nested scroll
             ) {
-                items(plants) { plant ->
+                items(plantsMainScreenList) { plant ->
                     PlantCard(plant)
                 }
             }
         }
+
     }
 }
 
@@ -175,16 +246,12 @@ fun CategoriesRow() {
         modifier = Modifier
             .fillMaxWidth()
             .padding(bottom = 16.dp)
-            .clip(RoundedCornerShape(30.dp)) // Add rounded corners
+            .clip(RoundedCornerShape(30.dp))
             .background(
                 Brush.linearGradient(
                     colors = listOf(
-                        Color(0xFF558E32),
-                        Color(0xFF8BC34A),
-                        Color(0xffd6eccc),
-                        Color(0xffd6eccc),
-                        Color(0xFF8BC34A),
-                        Color(0xFF558E32)
+                        Color(0xFF49792B),
+                        Color(0xFF8BC34A)
                     )
                 )
             )
@@ -206,7 +273,7 @@ fun CategoriesRow() {
 }
 
 @Composable
-fun RecentPlantsLazyRow(plants: List<Plant>) {
+fun RecentPlantsLazyRow(plants: List<Plant>, navController: NavHostController) {
     LazyRow(
         modifier = Modifier
             .fillMaxWidth()
@@ -217,8 +284,53 @@ fun RecentPlantsLazyRow(plants: List<Plant>) {
             RecentPlantCard(
                 name = plant.name,
                 imageResourceId = plant.imageResourceId,
+                onClick = { navController.navigate("eachPlantDescription/${plant.id}") }
             )
         }
+    }
+}
+
+@Composable
+fun RecentPlantCard(name: String, imageResourceId: Int, onClick: () -> Unit) {
+    Box(
+        modifier = Modifier
+            .requiredWidth(117.dp)
+            .requiredHeight(158.dp)
+            .clip(RoundedCornerShape(24.426.dp))
+            .background(
+                Brush.linearGradient(
+                    colors = listOf(
+                        Color(0xEB8BC34A),
+                        Color(0xEB578D32),
+
+                        ),
+                )
+            )
+            .border(1.dp, color = Color(0xFF394929), shape = RoundedCornerShape(24.426.dp))
+            .clickable { onClick() },
+        contentAlignment = Alignment.TopCenter
+    ) {
+        Image(
+            painter = painterResource(id = imageResourceId),
+            contentDescription = "$name plant",
+            modifier = Modifier
+                .fillMaxHeight(0.75f)
+                .padding(0.dp),
+            contentScale = ContentScale.FillHeight
+        )
+        Spacer(modifier = Modifier.height(8.dp))
+        Text(
+            text = name,
+            color = Color(0xff304022),
+            style = TextStyle(
+                fontSize = 12.sp,
+                fontWeight = FontWeight.Bold
+            ),
+            modifier = Modifier
+                .padding(8.dp)
+                .align(Alignment.BottomCenter),
+            textAlign = TextAlign.Center
+        )
     }
 }
 
@@ -260,6 +372,7 @@ fun PlantCard(plant: Plant) {
         }
     }
 }
+
 @Composable
 fun CategoryButton(text: String) {
     Box(
@@ -284,57 +397,9 @@ fun CategoryButton(text: String) {
     }
 }
 
-@Composable
-fun RecentPlantCard(name: String, imageResourceId: Int) {
-    Box(
-        modifier = Modifier
-            .requiredWidth(117.dp)
-            .requiredHeight(158.dp)
-            .clip(RoundedCornerShape(24.426.dp))
-            .background(
-                Brush.linearGradient(
-                    colors = listOf(
-                        Color.White,
-                        Color.White,
-                        Color(0xffd6eccc),
-                        Color(0xCD8BC34A),
-
-                        Color(0xFF558E32)
-
-                        ),
-                )
-            )
-            .border(1.dp, color = Color(0xFF394929), shape = RoundedCornerShape(24.426.dp)),
-        contentAlignment = Alignment.TopCenter
-    ) {
-        Image(
-            painter = painterResource(id = imageResourceId),
-            contentDescription = "$name plant", // Add content description
-            modifier = Modifier
-                .fillMaxHeight(0.75f)
-                .padding(0.dp),
-            contentScale = ContentScale.FillHeight
-        )
-        Spacer(modifier = Modifier.height(8.dp))
-        Text(
-            text = name,
-            color = Color(0xff304022),
-            style = TextStyle(
-                fontSize = 12.sp,
-                fontWeight = FontWeight.Bold
-            ),
-            modifier = Modifier
-                .padding(8.dp)
-                .align(Alignment.BottomCenter),
-            textAlign = TextAlign.Center // Add padding to the text
-        )
-    }
-}
-
 @Preview(showBackground = true)
 @Composable
 fun MainScreenPreview() {
-    MainScreen()
+    val navController = rememberNavController()
+    MainScreen(modifier = Modifier)
 }
-
-

@@ -1,239 +1,312 @@
 import androidx.compose.foundation.Image
-import androidx.compose.foundation.background
-import androidx.compose.foundation.layout.*
-import androidx.compose.foundation.lazy.LazyRow
-import androidx.compose.foundation.lazy.items
-import androidx.compose.foundation.shape.CircleShape
-import androidx.compose.foundation.shape.RoundedCornerShape
-import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.filled.Home
-import androidx.compose.material.icons.filled.List
-import androidx.compose.material.icons.filled.Person
-import androidx.compose.material.icons.filled.Refresh
-import androidx.compose.material.icons.filled.Search
-import androidx.compose.material3.*
+import androidx.compose.foundation.layout.Box
+import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.size
+import androidx.compose.material3.ExperimentalMaterial3Api
+import androidx.compose.material3.Icon
+import androidx.compose.material3.MaterialTheme
+import androidx.compose.material3.Text
+import androidx.compose.material3.TextField
+import androidx.compose.material3.TextFieldDefaults
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.mutableStateOf
-import androidx.compose.runtime.saveable.rememberSaveable
+import androidx.compose.runtime.remember
+import androidx.compose.runtime.rememberUpdatedState
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
-import androidx.compose.ui.draw.shadow
-import androidx.compose.ui.graphics.Brush
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.vector.ImageVector
-import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.res.painterResource
+import androidx.compose.ui.res.vectorResource
+import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.font.FontWeight
+import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import androidx.compose.animation.core.animateDpAsState
+import androidx.compose.foundation.background
+import androidx.compose.foundation.border
+import androidx.compose.foundation.clickable
+import androidx.compose.foundation.horizontalScroll
+import androidx.compose.foundation.interaction.MutableInteractionSource
+import androidx.compose.foundation.interaction.collectIsFocusedAsState
+import androidx.compose.foundation.layout.Arrangement
+import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.Spacer
+import androidx.compose.foundation.layout.fillMaxHeight
+import androidx.compose.foundation.layout.height
+import androidx.compose.foundation.layout.offset
+import androidx.compose.foundation.layout.requiredHeight
+import androidx.compose.foundation.layout.requiredWidth
+import androidx.compose.foundation.lazy.LazyColumn
+import androidx.compose.foundation.lazy.LazyRow
+import androidx.compose.foundation.lazy.items
+import androidx.compose.foundation.rememberScrollState
+import androidx.compose.foundation.shape.CircleShape
+import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.foundation.verticalScroll
+import androidx.compose.material3.Card
+import androidx.compose.material3.CardDefaults
+import androidx.compose.runtime.collectAsState
+import androidx.compose.runtime.getValue
+import androidx.compose.ui.graphics.Brush
+import androidx.compose.ui.layout.ContentScale
+import androidx.compose.ui.platform.LocalFocusManager
+import androidx.compose.ui.text.font.FontWeight.Companion.Bold
+import androidx.lifecycle.viewmodel.compose.viewModel
+import androidx.navigation.NavHostController
+import androidx.navigation.compose.rememberNavController
 import com.theclonebox.ayurgreens.R
-import com.theclonebox.ayurgreens.ScreenElements.BottomNavItem
-import com.theclonebox.ayurgreens.ScreenElements.BottomNavigationBar
+import com.theclonebox.ayurgreens.data.Plant
+import com.theclonebox.ayurgreens.data.plantsMainScreenList
+import com.theclonebox.ayurgreens.models.SearchViewModel
 
+@OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun SearchAndNavigationScreen() {
-    val backgroundColor = Color(0xFFF5F5F5)
-    val primaryTextColor = Color(0xFF4A6741)
+fun SearchAndNavigationScreen(navController: NavHostController) {
+    val interactionSource = remember { MutableInteractionSource() }
+    val isFocused by interactionSource.collectIsFocusedAsState()
+    val iconSize by animateDpAsState(if (isFocused) 32.dp else 22.dp)
+    val focusManager = LocalFocusManager.current
+
+    // Search bar view model
+    val viewModel: SearchViewModel = viewModel()
+    val searchText by viewModel.searchText.collectAsState()
+    val plants by viewModel.plants.collectAsState()
 
     Box(
         modifier = Modifier
             .fillMaxSize()
-            .background(backgroundColor)
+            .clickable(
+                interactionSource = interactionSource,
+                indication = null
+            ) {
+                // Clear focus when clicking outside the TextField
+                focusManager.clearFocus()
+            }
     ) {
         Column(
             modifier = Modifier
-                .fillMaxSize()
-                .padding(16.dp)
+                .fillMaxWidth()
+                .padding(12.dp)
         ) {
-            HeaderText(primaryTextColor)
-            Spacer(modifier = Modifier.height(16.dp))
-            SearchBar()
-            Spacer(modifier = Modifier.height(24.dp))
-            RecentSection()
-            Spacer(modifier = Modifier.height(24.dp))
-            TopSearchesSection()
-        }
-        BottomNavigationBar(rememberSaveable {
-            mutableStateOf(2)
-        })
-    }
-}
 
-@Composable
-fun HeaderText(textColor: Color) {
-    Text(
-        text = "We made the finding\nplants easy.",
-        fontSize = 28.sp,
-        fontWeight = FontWeight.Bold,
-        color = textColor,
-        lineHeight = 34.sp
-    )
-}
+            if (!isFocused) {
 
-@Composable
-fun SearchBar() {
-    Row(
-        modifier = Modifier
-            .fillMaxWidth()
-            .height(56.dp)
-            .clip(RoundedCornerShape(28.dp))
-            .background(Color.White)
-            .shadow(elevation = 8.dp, shape = RoundedCornerShape(28.dp)),
-        verticalAlignment = Alignment.CenterVertically
-    ) {
-        Spacer(modifier = Modifier.width(16.dp))
-        Text(
-            text = "Search plants...",
-            color = Color.Gray,
-            modifier = Modifier.weight(1f)
-        )
-        Box(
-            modifier = Modifier
-                .size(48.dp)
-                .clip(CircleShape)
-                .background(
-                    brush = Brush.verticalGradient(
-                        colors = listOf(Color(0xFF9CCC65), Color(0xFF8BC34A))
-                    )
+                Image(
+                    painter = painterResource(id = R.drawable.ayurgreens_close_up),
+                    contentDescription = null,
+                    modifier = Modifier
+                        .padding(16.dp)
+                        .fillMaxWidth(),
+                    alignment = Alignment.Center
                 )
-                .shadow(
-                    elevation = 8.dp,
-                    shape = CircleShape,
-                    spotColor = Color(0xFF8BC34A)
-                ),
-            contentAlignment = Alignment.Center
-        ) {
-            Icon(
-                imageVector = Icons.Filled.Search,
-                contentDescription = "Search",
-                tint = Color.White
-            )
-        }
-        Spacer(modifier = Modifier.width(4.dp))
-    }
-}
-
-
-@Composable
-fun RecentSection() {
-    Column {
-        Text(
-            text = "Recent",
-            fontSize = 20.sp,
-            fontWeight = FontWeight.Bold,
-            color = Color(0xFF4A6741)
-        )
-        Spacer(modifier = Modifier.height(12.dp))
-        LazyRow(
-            horizontalArrangement = Arrangement.spacedBy(12.dp)
-        ) {
-            items(recentPlants) { plant ->
-                RecentPlantItem(plant)
+            } else
+            {
+                Spacer(modifier = Modifier.height(32.dp))
             }
-        }
-    }
-}
-
-@Composable
-fun RecentPlantItem(plant: Plant) {
-    Card(
-        modifier = Modifier
-            .width(160.dp)
-            .height(80.dp),
-        shape = RoundedCornerShape(16.dp),
-        elevation = CardDefaults.cardElevation(defaultElevation = 8.dp)
-    ) {
-        Row(
-            modifier = Modifier.fillMaxSize(),
-            verticalAlignment = Alignment.CenterVertically
-        ) {
-            Image(
-                painter = painterResource(id = plant.imageRes),
-                contentDescription = null,
-                modifier = Modifier
-                    .size(80.dp)
-                    .clip(RoundedCornerShape(topStart = 16.dp, bottomStart = 16.dp)),
-                contentScale = ContentScale.Crop
+            Text(
+                text = "Welcome !",
+                fontSize = 22.sp,
+                color = Color(0xff394929),
+                textAlign = TextAlign.Start,
+                style = TextStyle(fontSize = 28.sp),
+                fontWeight = FontWeight.ExtraBold,
+                modifier = Modifier.padding(10.dp)
             )
             Text(
-                text = plant.name,
-                modifier = Modifier.padding(horizontal = 12.dp),
-                fontWeight = FontWeight.Medium,
-                fontSize = 14.sp,
-                color = Color(0xFF4A6741)
+                text = "What's the next search?",
+                fontSize = 30.sp,
+                color = Color(0xff394929),
+                textAlign = TextAlign.Start,
+                style = TextStyle(fontSize = 28.sp),
+                fontWeight = FontWeight.ExtraBold,
+                modifier = Modifier.padding(start = 12.dp)
             )
-        }
-    }
-}
-
-data class Plant(val name: String, val imageRes: Int)
-
-val recentPlants = listOf(
-    Plant("Peperomia Houseplant", R.drawable.plant1),
-    Plant("Crassula Houseplant", R.drawable.plant4),
-    Plant("Monstera Houseplant", R.drawable.plant3)
-)
-
-@Composable
-fun TopSearchesSection() {
-    Column {
-        Text(
-            text = "Top Searches",
-            fontSize = 20.sp,
-            fontWeight = FontWeight.Bold,
-            color = Color(0xFF4A6741)
-        )
-        Spacer(modifier = Modifier.height(12.dp))
-        Row(
-            modifier = Modifier.fillMaxWidth(),
-            horizontalArrangement = Arrangement.spacedBy(12.dp)
-        ) {
-            topSearchPlants.forEach { plant ->
-                TopSearchItem(plant, modifier = Modifier.weight(1f))
-            }
-        }
-    }
-}
-
-@Composable
-fun TopSearchItem(plant: Plant, modifier: Modifier = Modifier) {
-    Card(
-        modifier = modifier.aspectRatio(0.8f),
-        shape = RoundedCornerShape(16.dp),
-        elevation = CardDefaults.cardElevation(defaultElevation = 8.dp)
-    ) {
-        Column {
-            Image(
-                painter = painterResource(id = plant.imageRes),
-                contentDescription = null,
+            Spacer(modifier = Modifier.padding(8.dp))
+            TextField(
+                value = searchText,
+                onValueChange = viewModel::onSearchTextChange,
+                placeholder = { Text(text = "Search...") },
+                leadingIcon = {
+                    Icon(
+                        imageVector = ImageVector.vectorResource(id = R.drawable.search_alt_2_svgrepo_com),
+                        contentDescription = "Search Icon",
+                        modifier = Modifier.size(iconSize)
+                    )
+                },
                 modifier = Modifier
                     .fillMaxWidth()
-                    .weight(1f),
-                contentScale = ContentScale.Crop
+                    .padding(6.dp)
+                    .clip(MaterialTheme.shapes.extraLarge),
+                colors = TextFieldDefaults.textFieldColors(
+                    containerColor = Color(0xFFF2F6EE),
+                    focusedIndicatorColor = Color(0xFF394929),
+                    unfocusedIndicatorColor = Color(0xFF394929),
+                    focusedLeadingIconColor = Color(0xFF394929),
+                    unfocusedLeadingIconColor = Color(0xFF394929),
+                ),
+                interactionSource = interactionSource
             )
-            Text(
-                text = plant.name,
-                modifier = Modifier.padding(12.dp),
-                fontWeight = FontWeight.Medium,
-                fontSize = 16.sp,
-                color = Color(0xFF4A6741)
+            Spacer(modifier = Modifier.padding(8.dp))
+
+            if (isFocused) {
+                LazyColumn {
+                    items(plants) { plant ->
+                        Card(
+                            modifier = Modifier
+                                .fillMaxWidth()
+                                .padding(8.dp)
+                                .clip(MaterialTheme.shapes.medium)
+                                .clickable { navController.navigate("eachPlantDescription/${plant.name}") },
+                            colors = CardDefaults.cardColors(Color(0xFFF2F6EE))
+                        ) {
+                            Column {
+                                Image(
+                                    painter = painterResource(id = plant.img),
+                                    contentDescription = null,
+                                    modifier = Modifier
+                                        .fillMaxWidth()
+                                        .height(20.dp)
+                                        .clip(CircleShape),
+                                )
+                                Text(
+                                    text = plant.name,
+                                    fontSize = 20.sp,
+                                    fontWeight = FontWeight.Bold,
+                                    color = Color(0xff394929),
+                                    modifier = Modifier.padding(8.dp)
+                                )
+                                Text(
+                                    text = plant.description,
+                                    fontSize = 14.sp,
+                                    fontWeight = FontWeight.Normal,
+                                    color = Color(0xff394929),
+                                    modifier = Modifier.padding(8.dp)
+                                )
+                            }
+                        }
+                    }
+                }
+            }
+            if (!isFocused) {
+                Spacer(modifier = Modifier.height(8.dp))
+                Text(
+                    text = "Recommended For You",
+                    fontSize = 20.sp,
+                    fontWeight = FontWeight.ExtraBold,
+                    color = Color(0xFF9D9D9D),
+                    modifier = Modifier.padding(top = 20.dp)
+                )
+                Spacer(modifier = Modifier.height(16.dp))
+                TopThreeRecommendations()
+                Spacer(modifier = Modifier.height(16.dp))
+                RecommendedSearchesLazyRow(plantsMainScreenList, navController)
+                Spacer(modifier = Modifier.height(12.dp))
+            }
+        }
+    }
+}
+
+
+@Composable
+fun RecommendedSearchesLazyRow(plants: List<Plant>, navController: NavHostController) {
+    LazyRow(
+        modifier = Modifier
+            .fillMaxWidth()
+            .padding(bottom = 16.dp),
+        horizontalArrangement = Arrangement.spacedBy(8.dp)
+    ) {
+        items(plants) { plant ->
+            RecommendedSearches(
+                name = plant.name,
+                imageResourceId = plant.imageResourceId,
+                onClick = { navController.navigate("eachPlantDescription/${plant.id}") }
             )
         }
     }
 }
 
-val topSearchPlants = listOf(
-    Plant("Peperomia Houseplant", R.drawable.plant1),
-    Plant("Crassula Houseplant", R.drawable.plant2)
-)
-
-
-
-
-@Preview
 @Composable
-fun SearchAndNavigationScreenPreview() {
-    SearchAndNavigationScreen()
+fun RecommendedSearches(name: String, imageResourceId: Int, onClick: () -> Unit) {
+    Box(
+        modifier = Modifier
+            .requiredWidth(117.dp)
+            .requiredHeight(158.dp)
+            .clip(RoundedCornerShape(24.426.dp))
+            .background(
+                Brush.linearGradient(
+                    colors = listOf(
+                        Color(0xFFAFCB5A),
+                        Color(0xFF60B34D),
+
+                        ),
+                )
+            )
+            .border(1.dp, color = Color(0xFF394929), shape = RoundedCornerShape(24.426.dp))
+            .clickable { onClick() },
+        contentAlignment = Alignment.TopCenter
+    ) {
+        Image(
+            painter = painterResource(id = imageResourceId),
+            contentDescription = "$name plant",
+            modifier = Modifier
+                .fillMaxHeight(0.75f)
+                .padding(0.dp),
+            contentScale = ContentScale.FillHeight
+        )
+        Spacer(modifier = Modifier.height(8.dp))
+        Text(
+            text = name,
+            color = Color(0xff304022),
+            style = TextStyle(
+                fontSize = 12.sp,
+                fontWeight = FontWeight.Bold
+            ),
+            modifier = Modifier
+                .padding(8.dp)
+                .align(Alignment.BottomCenter),
+            textAlign = TextAlign.Center
+        )
+    }
+}
+
+@Composable
+fun TopThreeRecommendations(){
+    Row(modifier = Modifier
+        .fillMaxWidth(1f)
+        .horizontalScroll(rememberScrollState()),
+        horizontalArrangement = Arrangement.SpaceAround
+    ) {
+        TopThreeRecommendationsEachBox("Tulsi")
+        TopThreeRecommendationsEachBox("Aswagandha")
+        TopThreeRecommendationsEachBox("Plum")
+    }
+}
+
+@Composable
+fun TopThreeRecommendationsEachBox(name:String){
+    Box(modifier = Modifier
+        .border(1.dp, Color(0x4D81B148), RoundedCornerShape(25.dp))
+        .clickable { /* to do */ }
+        .clip(RoundedCornerShape(25.dp)))
+    {
+        Text(text = name,
+            fontWeight = FontWeight.SemiBold,
+            fontSize = 20.sp,
+            modifier = Modifier.padding(start = 8.dp, end = 8.dp, top = 3.dp, bottom = 3.dp)
+        )
+    }
+}
+
+@Preview(showBackground = true, showSystemUi = true)
+@Composable
+fun PreviewSearchAndNavigationScreen() {
+    val navController = rememberNavController()
+    SearchAndNavigationScreen(navController)
 }

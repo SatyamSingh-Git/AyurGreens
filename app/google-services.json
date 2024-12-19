@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "1024400240822",
+    "project_id": "ayurgreens-6b2d5",
+    "storage_bucket": "ayurgreens-6b2d5.firebasestorage.app"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:1024400240822:android:7c611657979364ae283617",
+        "android_client_info": {
+          "package_name": "com.theclonebox.ayurgreens"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyAuI0PQUQ7p6upMcmVDygDAxJHEN2Pf4KA"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

@@ -20,6 +20,11 @@ val CustomFontFamily = FontFamily(
     Font(R.font.montserrat_bold, FontWeight.W900)
 )
 
+val CustomFontFamilyMedium = FontFamily(
+    Font(R.font.montserrat_bold, FontWeight.Medium)
+)
+
+
 @Composable
 fun AyurGreensTheme(
     darkTheme: Boolean = isSystemInDarkTheme(),
