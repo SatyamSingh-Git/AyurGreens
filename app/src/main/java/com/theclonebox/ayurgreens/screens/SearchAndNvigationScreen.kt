@@ -139,13 +139,6 @@ fun SearchAndNavigationScreen(navController: NavHostController) {
                     .fillMaxWidth()
                     .padding(6.dp)
                     .clip(MaterialTheme.shapes.extraLarge),
-                colors = TextFieldDefaults.textFieldColors(
-                    containerColor = Color(0xFFF2F6EE),
-                    focusedIndicatorColor = Color(0xFF394929),
-                    unfocusedIndicatorColor = Color(0xFF394929),
-                    focusedLeadingIconColor = Color(0xFF394929),
-                    unfocusedLeadingIconColor = Color(0xFF394929),
-                ),
                 interactionSource = interactionSource
             )
             Spacer(modifier = Modifier.padding(8.dp))
