@@ -101,6 +101,9 @@ fun MainScreen(modifier: Modifier = Modifier, navController: NavHostController) 
                 navController = navController
             )
         }
+        composable("eachPlantMoreDescription") {
+            EachPlantMoreDescriptionScreen(navController)
+        }
     }
 }
 

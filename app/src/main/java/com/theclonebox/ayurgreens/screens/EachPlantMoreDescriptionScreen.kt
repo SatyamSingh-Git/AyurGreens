@@ -19,11 +19,12 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import androidx.navigation.NavController
+import androidx.navigation.NavHostController
 import com.theclonebox.ayurgreens.data.eachPlantDescriptionData
 
-@Preview(showBackground = true, showSystemUi = true)
 @Composable
-fun EachPlantMoreDescriptionScreen() {
+fun EachPlantMoreDescriptionScreen(navController: NavHostController) {
     val morePlantData = eachPlantDescriptionData
 
     Column(
