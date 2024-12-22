@@ -71,7 +71,7 @@ import com.theclonebox.ayurgreens.data.Plant
 import com.theclonebox.ayurgreens.data.plantCategoryList
 import com.theclonebox.ayurgreens.data.plantsMainScreenList
 @Composable
-fun MainScreen(modifier: Modifier = Modifier,navController: NavHostController) {
+fun MainScreen(navController: NavHostController) {
     val user = Firebase.auth.currentUser
 
 
