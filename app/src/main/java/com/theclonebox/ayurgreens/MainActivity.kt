@@ -42,6 +42,7 @@ class MainActivity : ComponentActivity() {
         installSplashScreen()
         enableEdgeToEdge()
 
+        val chatViewModel = ViewModelProvider(this)[ChatViewModel::class.java]
         setContent {
             AyurGreensTheme {
                 val navController = rememberNavController()  //***
