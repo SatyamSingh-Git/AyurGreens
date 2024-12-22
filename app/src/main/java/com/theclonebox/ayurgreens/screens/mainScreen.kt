@@ -70,10 +70,24 @@ import com.theclonebox.ayurgreens.R
 import com.theclonebox.ayurgreens.data.Plant
 import com.theclonebox.ayurgreens.data.plantCategoryList
 import com.theclonebox.ayurgreens.data.plantsMainScreenList
+import androidx.compose.runtime.LaunchedEffect
+import androidx.activity.compose.BackHandler
+
 @Composable
-fun MainScreen(modifier: Modifier = Modifier,navController: NavHostController) {
+fun MainScreen(modifier: Modifier = Modifier, navController: NavHostController) {
     val user = Firebase.auth.currentUser
 
+    LaunchedEffect(user) {
+        if (user != null) {
+            navController.navigate("main") {
+                popUpTo("authScreen") { inclusive = true }
+            }
+        } else {
+            navController.navigate("authScreen") {
+                popUpTo("main") { inclusive = true }
+            }
+        }
+    }
 
     NavHost(
         navController = navController,
@@ -114,6 +128,11 @@ fun MainContent(navController: NavHostController) {
 
     var expanded by remember {
         mutableStateOf(false)
+    }
+
+    BackHandler {
+        // Handle back press
+        navController.popBackStack()
     }
 
     Surface(
