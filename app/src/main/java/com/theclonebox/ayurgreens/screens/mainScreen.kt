@@ -71,8 +71,7 @@ import com.theclonebox.ayurgreens.data.Plant
 import com.theclonebox.ayurgreens.data.plantCategoryList
 import com.theclonebox.ayurgreens.data.plantsMainScreenList
 @Composable
-fun MainScreen(modifier: Modifier = Modifier) {
-    val navController = rememberNavController()
+fun MainScreen(modifier: Modifier = Modifier,navController: NavHostController) {
     val user = Firebase.auth.currentUser
 
 
@@ -148,7 +147,6 @@ fun MainContent(navController: NavHostController) {
                             contentDescription = null,
                             modifier = Modifier.size(34.dp)
                         )
-
                     }
                     DropdownMenu(
                         expanded = expanded,
@@ -179,7 +177,6 @@ fun MainContent(navController: NavHostController) {
                     }
                 }
             }
-
 
             // Title
             Text(
@@ -236,7 +233,6 @@ fun MainContent(navController: NavHostController) {
                 }
             }
         }
-
     }
 }
 
@@ -401,5 +397,5 @@ fun CategoryButton(text: String) {
 @Composable
 fun MainScreenPreview() {
     val navController = rememberNavController()
-    MainScreen(modifier = Modifier)
+    MainScreen(modifier = Modifier, navController = navController)
 }

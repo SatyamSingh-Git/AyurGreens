@@ -92,7 +92,7 @@ fun MainSelectedScreen(
     Column(modifier = modifier.fillMaxSize()) {
         // Display the selected screen
         when (selectedItem.value) {
-            0 -> MainScreen(modifier = Modifier)
+            0 -> MainScreen(modifier = Modifier, navController = navController) // Pass navController
             1 -> ExploreScreen(modifier = Modifier)
             2 -> SearchAndNavigationScreen(navController = navController) // Pass navController
             3 -> BookmarkScreen(modifier = Modifier)
