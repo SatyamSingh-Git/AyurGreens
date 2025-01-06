@@ -1,5 +1,8 @@
+import android.text.TextPaint
 import androidx.compose.foundation.Image
+import androidx.compose.foundation.background
 import androidx.compose.foundation.border
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
@@ -13,7 +16,6 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.requiredHeight
 import androidx.compose.foundation.layout.requiredWidth
 import androidx.compose.foundation.layout.size
-import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.verticalScroll
@@ -23,10 +25,8 @@ import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.draw.alpha
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.draw.drawBehind
-import androidx.compose.ui.draw.shadow
 import androidx.compose.ui.geometry.Offset
 import androidx.compose.ui.geometry.Size
 import androidx.compose.ui.graphics.Color
@@ -37,81 +37,106 @@ import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import androidx.navigation.NavHostController
+import androidx.navigation.compose.rememberNavController
 import com.theclonebox.ayurgreens.R
 import com.theclonebox.ayurgreens.screens.CategoriesRow
+import androidx.compose.foundation.Canvas
+import androidx.compose.ui.graphics.drawscope.drawIntoCanvas
+import androidx.compose.ui.graphics.nativeCanvas
+import androidx.compose.ui.graphics.toArgb
+
 
 
 @Composable
-fun ExploreScreen(modifier: Modifier) {
+fun ExploreScreen(modifier: Modifier, navController: NavHostController) {
 
     Column(
         modifier = modifier
             .fillMaxSize()
+            .padding(6.dp)
     ) {
         ExploreTopPart()
         CategoriesRow()
-        ExplorePageMainPart()
+        ExplorePageMainPart(navController = navController)
     }
 }
 
+
 @Composable
-fun ExplorePageMainPart(modifier: Modifier = Modifier) {
+fun ExplorePageMainPart(modifier: Modifier = Modifier, navController: NavHostController) {
     val scrollState = rememberScrollState()
 
     Column(modifier = Modifier
         .fillMaxHeight(0.65f)
         .fillMaxWidth(1f)
         .padding(6.dp)
+        .background(Color(0x4D81B148), shape = RoundedCornerShape(10.dp))
         .border(2.dp, Color(0xFF608A38), RoundedCornerShape(10.dp)),
         verticalArrangement = Arrangement.SpaceAround,
     ) {
-        Column(
-            modifier = Modifier.fillMaxWidth(1f)
-                .padding(8.dp)
-                .verticalScroll(scrollState)
-        )
-        {
-            ExplorePageMainPartEachRow(
-                "Peperomia Houseplant",
-                "Crassula Houseplant",
-                R.drawable.plant1,
-                R.drawable.plant3
+        Row {
+            VerticalText("Popular")
+            Column(
+                modifier = Modifier.fillMaxWidth(1f)
+                    .padding(8.dp)
+                    .verticalScroll(scrollState)
             )
+            {
+                ExplorePageMainPartEachRow(
+                    "Peperomia",
+                    "Crassula",
+                    R.drawable.plant1,
+                    R.drawable.plant3,
+                    navController
+                )
 
-            ExplorePageMainPartEachRow(
-                "Asplenium Nidus",
-                "Peperomia Houseplant",
-                R.drawable.plant4,
-                R.drawable.plant2
-            )
+                ExplorePageMainPartEachRow(
+                    "Asplenium",
+                    "Houseplant",
+                    R.drawable.plant4,
+                    R.drawable.plant2,
+                    navController
+                )
 
-            ExplorePageMainPartEachRow(
-                "Peperomia Houseplant",
-                "Crassula Houseplant",
-                R.drawable.plant1,
-                R.drawable.plant3
-            )
+                ExplorePageMainPartEachRow(
+                    "Peperomia",
+                    "Crassula",
+                    R.drawable.plant1,
+                    R.drawable.plant3,
+                    navController
+                )
 
-            ExplorePageMainPartEachRow(
-                "Asplenium Nidus",
-                "Peperomia Houseplant",
-                R.drawable.plant4,
-                R.drawable.plant2
-            )
+                ExplorePageMainPartEachRow(
+                    "Asplenium",
+                    "Houseplant",
+                    R.drawable.plant4,
+                    R.drawable.plant2,
+                    navController
+                )
+
+            }
 
         }
-
     }
+
+    Spacer(modifier = Modifier.height(6.dp))
     Column(modifier = Modifier
         .fillMaxSize(1f)
         .padding(6.dp)
         .border(2.dp, Color(0xFF608A38), RoundedCornerShape(10.dp))
-    ) { ExplorePageMainPartEachRow(
-        "Asplenium Nidus",
-        "Peperomia Houseplant",
+        .background(Color(0x4D81B148), shape = RoundedCornerShape(10.dp))
+    ) {
+        Row(modifier = Modifier.fillMaxWidth(1f).padding(top = 12.dp)) {
+            VerticalText("Trending")
+            ExplorePageMainPartEachRow(
+        "Nidus",
+        "Peperomia",
         R.drawable.plant4,
-        R.drawable.plant2
-    ) }
+        R.drawable.plant2,
+        navController)
+        }
+    }
 }
 
     @Composable
@@ -119,28 +144,31 @@ fun ExplorePageMainPart(modifier: Modifier = Modifier) {
         plantName1: String = "Plant Name",
         plantName2: String = "Plant Name",
         plantImage1: Int = R.drawable.ic_launcher_foreground,
-        plantImage2: Int = R.drawable.ic_launcher_foreground
+        plantImage2: Int = R.drawable.ic_launcher_foreground,
+        navController: NavHostController
     ) {
         Spacer(modifier = Modifier.height(16.dp))
         Row(horizontalArrangement = Arrangement.SpaceAround, modifier = Modifier.fillMaxWidth(1f)) {
-            ExplorePageMainPartEachItem(plantName1, plantImage1)
-            ExplorePageMainPartEachItem(plantName2, plantImage2)
+            ExplorePageMainPartEachItem(plantName1, plantImage1, navController)
+            ExplorePageMainPartEachItem(plantName2, plantImage2, navController)
         }
     }
 
 @Composable
 fun ExplorePageMainPartEachItem(
     plantName: String,
-    plantImage: Int
+    plantImage: Int,
+    navController: NavHostController
 ) {
     Box(
         modifier = Modifier
             .requiredWidth(130.dp)
-            .requiredHeight(160.dp)
+            .requiredHeight(150.dp)
+            .background(Color.White, shape = RoundedCornerShape(10.dp))
             .clip(RoundedCornerShape(10.dp))
             .border(1.dp, Color(0xFF5F943C), RoundedCornerShape(10.dp))
             .drawBehind {
-                val shadowColor = Color(0xFF5E8611).copy(alpha = 0.2f)
+                val shadowColor = Color(0xFF224B04).copy(alpha = 0.7f)
                 val shadowRadius = 8.dp.toPx()
                 val offsetY = 8.dp.toPx()
                 drawRect(
@@ -149,6 +177,7 @@ fun ExplorePageMainPartEachItem(
                     size = Size(size.width, shadowRadius)
                 )
             }
+            .clickable { navController.navigate("eachPlantMoreDescriptionScreen") }
     ) {
         Column(
             modifier = Modifier.fillMaxSize(),
@@ -164,7 +193,7 @@ fun ExplorePageMainPartEachItem(
                 text = plantName,
                 color = Color(0xff394929),
                 textAlign = TextAlign.Center,
-                style = TextStyle(fontSize = 18.sp),
+                style = TextStyle(fontSize = 15.sp),
                 fontWeight = FontWeight.Bold
             )
         }
@@ -177,7 +206,7 @@ fun ExploreTopPart() {
     Row(
         modifier = Modifier
             .fillMaxWidth()
-            .padding(top = 8.dp, bottom = 6.dp),
+            .padding(top = 8.dp, start = 8.dp, end = 8.dp, bottom = 0.dp),
         horizontalArrangement = Arrangement.SpaceBetween,
         verticalAlignment = Alignment.CenterVertically
     ) {
@@ -198,15 +227,43 @@ fun ExploreTopPart() {
         textAlign = TextAlign.Start,
         style = TextStyle(fontSize = 28.sp),
         fontWeight = FontWeight.ExtraBold,
-        modifier = Modifier.fillMaxWidth().padding(16.dp)
+        modifier = Modifier.fillMaxWidth().padding(8.dp)
     )
 
 }
 
+
+@Composable
+fun VerticalText(text: String, modifier: Modifier = Modifier) {
+    Box(modifier = modifier
+        .fillMaxHeight()
+        .padding(18.dp),
+        contentAlignment = Alignment.Center
+    ) {
+        Canvas(modifier = Modifier.size(10.dp)) {
+            drawIntoCanvas { canvas ->
+                val paint = TextPaint().apply {
+                    color = Color(0xff304022).toArgb()
+                    textSize = 20.sp.toPx()
+                    textAlign = android.graphics.Paint.Align.CENTER
+                    typeface = android.graphics.Typeface.DEFAULT_BOLD // Make the text bold
+
+                }
+                val x = size.width
+                val y = size.height /2
+                canvas.nativeCanvas.save()
+                canvas.nativeCanvas.rotate(-90f, x, y)
+                canvas.nativeCanvas.drawText(text, x, y, paint)
+                canvas.nativeCanvas.restore()
+            }
+        }
+    }
+}
 @Composable
 @Preview(showBackground = true, showSystemUi = true)
 fun ExploreScreenPreview() {
-    ExploreScreen(Modifier)
+    val navController = rememberNavController()
+    ExploreScreen(Modifier, navController)
 }
 
 

@@ -222,7 +222,8 @@ private fun BookmarkPlantCard(item: BookmarkData) {
             .fillMaxWidth(0.6f)
             .clip(RoundedCornerShape(20.dp))
             .size(width = 170.dp, height = 180.dp)
-            .border(1.dp, Color.Black, RoundedCornerShape(20.dp)),
+            .border(1.dp, Color.Black, RoundedCornerShape(20.dp))
+            ,
         colors = CardDefaults.cardColors(Color(0x4D81B148))
     ) {
         Column {

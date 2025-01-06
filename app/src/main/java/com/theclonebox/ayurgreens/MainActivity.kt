@@ -94,7 +94,7 @@ fun MainSelectedScreen(
         // Display the selected screen
         when (selectedItem.value) {
             0 -> MainScreen(modifier = Modifier, navController = navController) // Pass navController
-            1 -> ExploreScreen(modifier = Modifier)
+            1 -> ExploreScreen(modifier = Modifier, navController = navController) // Pass navController
             2 -> SearchAndNavigationScreen(navController = navController) // Pass navController
             3 -> BookmarkScreen(modifier = Modifier)
             4 -> ChatBot(modifier = Modifier.padding(), viewModel = ChatViewModel())
