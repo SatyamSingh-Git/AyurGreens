@@ -59,7 +59,7 @@ fun ExplorePageMainPart(modifier: Modifier = Modifier) {
     val scrollState = rememberScrollState()
 
     Column(modifier = Modifier
-        .fillMaxHeight(0.5f)
+        .fillMaxHeight(0.65f)
         .fillMaxWidth(1f)
         .padding(6.dp)
         .border(2.dp, Color(0xFF608A38), RoundedCornerShape(10.dp)),
