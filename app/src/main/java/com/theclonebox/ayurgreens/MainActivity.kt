@@ -34,6 +34,7 @@ import com.theclonebox.ayurgreens.models.ChatViewModel
 import com.theclonebox.ayurgreens.screens.BookmarkScreen
 import com.theclonebox.ayurgreens.screens.ChatBot
 import com.theclonebox.ayurgreens.screens.MainScreen
+import ExploreScreen
 import com.theclonebox.ayurgreens.ui.theme.AyurGreensTheme
 
 class MainActivity : ComponentActivity() {
@@ -102,10 +103,7 @@ fun MainSelectedScreen(
 }
 
 
-@Composable
-fun ExploreScreen(modifier: Modifier.Companion) {
 
-}
 
 
 @Preview(showBackground = true, showSystemUi = true)
