@@ -9,6 +9,10 @@ import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.verticalScroll
+import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.ArrowBack
+import androidx.compose.material3.Icon
+import androidx.compose.material3.IconButton
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
@@ -34,6 +38,18 @@ fun EachPlantMoreDescriptionScreen(navController: NavHostController) {
             .background(Color(0x4D81B148))
             .verticalScroll(rememberScrollState())
     ) {
+
+        IconButton(
+            onClick = {navController.popBackStack() },
+            modifier = Modifier.padding(8.dp).align(Alignment.Start)
+        ) {
+            Icon(
+                imageVector = Icons.Filled.ArrowBack,
+                contentDescription = "Back"
+            )
+        }
+
+
         Image(
             painter = painterResource(id = morePlantData.img),
             contentDescription = morePlantData.name,
