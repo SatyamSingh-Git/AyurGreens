@@ -54,7 +54,7 @@ fun ExploreScreen(modifier: Modifier, navController: NavHostController) {
     Column(
         modifier = modifier
             .fillMaxSize()
-            .padding(6.dp)
+            .padding(start = 6.dp, end  = 6.dp)
     ) {
         ExploreTopPart()
         CategoriesRow()
@@ -70,13 +70,13 @@ fun ExplorePageMainPart(modifier: Modifier = Modifier, navController: NavHostCon
     Column(modifier = Modifier
         .fillMaxHeight(0.65f)
         .fillMaxWidth(1f)
-        .padding(6.dp)
-        .background(Color(0x4D81B148), shape = RoundedCornerShape(10.dp))
-        .border(2.dp, Color(0xFF608A38), RoundedCornerShape(10.dp)),
+        .padding(start = 6.dp, end = 6.dp)
+        .background(Color(0x4D81B148), shape = RoundedCornerShape(30.dp))
+        .border(2.dp, Color(0xFF608A38), RoundedCornerShape(30.dp)),
         verticalArrangement = Arrangement.SpaceAround,
     ) {
         Row {
-            VerticalText("Popular")
+            VerticalText("Trending")
             Column(
                 modifier = Modifier.fillMaxWidth(1f)
                     .padding(8.dp)
@@ -124,11 +124,11 @@ fun ExplorePageMainPart(modifier: Modifier = Modifier, navController: NavHostCon
     Column(modifier = Modifier
         .fillMaxSize(1f)
         .padding(6.dp)
-        .border(2.dp, Color(0xFF608A38), RoundedCornerShape(10.dp))
-        .background(Color(0x4D81B148), shape = RoundedCornerShape(10.dp))
+        .border(2.dp, Color(0xFF608A38), RoundedCornerShape(30.dp))
+        .background(Color(0x4D81B148), shape = RoundedCornerShape(30.dp))
     ) {
         Row(modifier = Modifier.fillMaxWidth(1f).padding(top = 12.dp)) {
-            VerticalText("Trending")
+            VerticalText("Popular")
             ExplorePageMainPartEachRow(
         "Nidus",
         "Peperomia",
@@ -147,7 +147,7 @@ fun ExplorePageMainPart(modifier: Modifier = Modifier, navController: NavHostCon
         plantImage2: Int = R.drawable.ic_launcher_foreground,
         navController: NavHostController
     ) {
-        Spacer(modifier = Modifier.height(16.dp))
+        Spacer(modifier = Modifier.height(12.dp))
         Row(horizontalArrangement = Arrangement.SpaceAround, modifier = Modifier.fillMaxWidth(1f)) {
             ExplorePageMainPartEachItem(plantName1, plantImage1, navController)
             ExplorePageMainPartEachItem(plantName2, plantImage2, navController)
@@ -164,9 +164,9 @@ fun ExplorePageMainPartEachItem(
         modifier = Modifier
             .requiredWidth(130.dp)
             .requiredHeight(150.dp)
-            .background(Color.White, shape = RoundedCornerShape(10.dp))
+            .background(Color.White, shape = RoundedCornerShape(20.dp))
             .clip(RoundedCornerShape(10.dp))
-            .border(1.dp, Color(0xFF5F943C), RoundedCornerShape(10.dp))
+            .border(1.dp, Color(0xFF5F943C), RoundedCornerShape(20.dp))
             .drawBehind {
                 val shadowColor = Color(0xFF224B04).copy(alpha = 0.7f)
                 val shadowRadius = 8.dp.toPx()

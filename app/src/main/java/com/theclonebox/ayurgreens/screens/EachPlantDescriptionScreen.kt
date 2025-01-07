@@ -113,7 +113,7 @@ fun PlantNameAndDescription(plantData: EachPlantDescriptionData, modifier: Modif
             )
             Icon(
                 painter = painterResource(id = R.drawable.bookmark_svgrepo_com),
-                contentDescription = null,
+                contentDescription = "Bookmark",
                 tint = Color(0xff394929),
                 modifier = Modifier
                     .size(24.dp)

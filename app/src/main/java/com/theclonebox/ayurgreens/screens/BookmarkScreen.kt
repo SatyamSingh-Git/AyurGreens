@@ -135,14 +135,18 @@ fun BookmarkRecentPlants() {
     Text(text = "Recently Bookmarked",
         fontSize = 20.sp,
         color = Color(0xFF394929),
-        modifier = Modifier.padding(6.dp)
+        modifier = Modifier.padding(6.dp),
+        fontWeight = FontWeight.Bold
+
     )
     Card(
         modifier = Modifier
             .fillMaxWidth()
             .padding(12.dp)
             .clip(RoundedCornerShape(20.dp))
-            .shadow(20.dp, RoundedCornerShape(20.dp), clip = false),
+            .shadow(20.dp, RoundedCornerShape(20.dp), clip = false)
+            .border(2.dp, Color(0xFF5F943C), RoundedCornerShape(20.dp))
+        ,
         elevation = CardDefaults.cardElevation(20.dp),
         colors = CardDefaults.cardColors(Color.White)
     ) {
@@ -204,7 +208,9 @@ fun BookmarkPlants() {
             .shadow(20.dp, RoundedCornerShape(20.dp), clip = false),
         colors = CardDefaults.cardColors(Color.White)
     ) {
-        LazyRow {
+        LazyRow(modifier = Modifier.border(2.dp, Color(0xFF608A38), RoundedCornerShape(30.dp))
+
+        ) {
             items(BookmarkData1) { item ->
                 BookmarkPlantCard(item)
             }
@@ -217,12 +223,12 @@ private fun BookmarkPlantCard(item: BookmarkData) {
     Card(
         onClick = { /*TODO*/ },
         modifier = Modifier
-            .padding(16.dp)
+            .padding(12.dp)
             .fillMaxHeight(0.9f)
             .fillMaxWidth(0.6f)
             .clip(RoundedCornerShape(20.dp))
-            .size(width = 170.dp, height = 180.dp)
-            .border(1.dp, Color.Black, RoundedCornerShape(20.dp))
+            .size(width = 150.dp, height = 180.dp)
+            .border(1.dp, Color(0xFF5F943C), RoundedCornerShape(20.dp))
             ,
         colors = CardDefaults.cardColors(Color(0x4D81B148))
     ) {
