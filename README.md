@@ -54,7 +54,8 @@ AyurGreens is an Android app designed to bring the power of nature and technolog
 
 ## 📱 Screenshots
 
-![Home Page](Screen Shots/HomeScreen.jpg)
+![Home Page](AyurGreens/Screen Shots
+/AI Chatbot.jpg)
 
 ![Explore Screen](Screen Shots/Exoplore page.jpg)
 
