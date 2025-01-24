@@ -111,11 +111,11 @@ AyurGreens is an Android app designed to bring the power of nature and technolog
 ## 📱 Screenshots
 
 <div align="center">
-  <img src="https://github.com/SatyamSingh-Git/AyurGreens/blob/16e3350d0674e56fed04683ed21f893c7a4ad7be/Screen%20Shots/AI%20Chatbot.jpg" alt="AI Chatbot Screenshot" width="250">
-  <img src="https://github.com/SatyamSingh-Git/AyurGreens/blob/28456de65856b7b529bf7629daf4113c2fc4856e/Screen%20Shots/HomeScreen.jpg" alt="Home Screenshot" width="250">
-  <img src="https://github.com/SatyamSingh-Git/AyurGreens/blob/28456de65856b7b529bf7629daf4113c2fc4856e/Screen%20Shots/Exoplore%20page.jpg" alt="Explore Screenshot" width="250">
-  <img src="https://github.com/SatyamSingh-Git/AyurGreens/blob/28456de65856b7b529bf7629daf4113c2fc4856e/Screen%20Shots/Bookmark.jpg" alt="Bookmark Screenshot" width="250">
-  <img src="https://github.com/SatyamSingh-Git/AyurGreens/blob/28456de65856b7b529bf7629daf4113c2fc4856e/Screen%20Shots/Search%20Page.jpg" alt="Search Screenshot" width="250">
+  <img src="https://github.com/SatyamSingh-Git/AyurGreens/blob/16e3350d0674e56fed04683ed21f893c7a4ad7be/Screen%20Shots/AI%20Chatbot.jpg" alt="AI Chatbot Screenshot" width="220">
+  <img src="https://github.com/SatyamSingh-Git/AyurGreens/blob/28456de65856b7b529bf7629daf4113c2fc4856e/Screen%20Shots/HomeScreen.jpg" alt="Home Screenshot" width="220">
+  <img src="https://github.com/SatyamSingh-Git/AyurGreens/blob/28456de65856b7b529bf7629daf4113c2fc4856e/Screen%20Shots/Exoplore%20page.jpg" alt="Explore Screenshot" width="220">
+  <img src="https://github.com/SatyamSingh-Git/AyurGreens/blob/28456de65856b7b529bf7629daf4113c2fc4856e/Screen%20Shots/Bookmark.jpg" alt="Bookmark Screenshot" width="220">
+  <img src="https://github.com/SatyamSingh-Git/AyurGreens/blob/28456de65856b7b529bf7629daf4113c2fc4856e/Screen%20Shots/Search%20Page.jpg" alt="Search Screenshot" width="220">
 </div>
 ---
 
