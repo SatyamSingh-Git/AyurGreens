@@ -52,6 +52,20 @@ AyurGreens is an Android app designed to bring the power of nature and technolog
 
 ---
 
+## 📱 Screenshots
+
+![Home Page](Screen Shots/HomeScreen.jpg)
+
+![Explore Screen](Screen Shots/Exoplore page.jpg)
+
+![Search Page](Screen Shots/Search Page.jpg)
+
+![Bookmark Page](Screen Shots/Bookmark.jpg)
+
+![AI Chatbot](Screen Shots/AI Chatbot.jpg)
+
+---
+
 ## 🚀 Future Enhancements
 
 - **☁️ Cloud-Based Data Storage**: Transition from local storage to Firebase or other cloud platforms for seamless synchronization across devices.
