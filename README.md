@@ -92,7 +92,7 @@ This project is licensed under the MIT License. See the `LICENSE` file for detai
 
 For any questions or feedback, feel free to reach out:
 - Email: theindianboy555@gmail.com
-- LinkedIn: [Your Profile](https://linkedin.com/in/Satyam--Singh--)
+- LinkedIn: [Let's Connect on LinkedIn](https://linkedin.com/in/Satyam--Singh--)
 
 ---
 
